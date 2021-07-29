@@ -1,0 +1,30 @@
+name: 'yqtb'
+
+on:
+  schedule:
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+jobs:
+  yqtb:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: QingQiz/AoxiangRobot
+      - name: Set up python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - name: Install dependencies
+        run: pip install --upgrade -r requirements.txt
+      - name: main
+        env:
+          AOXIANG_USERNAME: ${{ secrets.AOXIANG_USERNAME }}
+          AOXIANG_PASSWORD: ${{ secrets.AOXIANG_PASSWORD }}
+          YQTB_PROVINCE: ${{ secrets.YQTB_PROVINCE }}
+          YQTB_CITY: ${{ secrets.YQTB_CITY }}
+          YQTB_LOCATION: ${{ secrets.YQTB_LOCATION }}
+        run: |
+          echo $AOXIANG_PASSWORD > ./password
+          ./aoxiangRobot -u $AOXIANG_USERNAME -p ./password yqtb -p "$YQTB_PROVINCE" -c "$YQTB_CITY" -l $YQTB_LOCATION

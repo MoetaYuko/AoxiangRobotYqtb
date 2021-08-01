@@ -27,4 +27,12 @@ jobs:
           YQTB_LOCATION: ${{ secrets.YQTB_LOCATION }}
         run: |
           echo $AOXIANG_PASSWORD > ./password
-          ./aoxiangRobot -u $AOXIANG_USERNAME -p ./password yqtb -p "$YQTB_PROVINCE" -c "$YQTB_CITY" -l $YQTB_LOCATION
+          retry=0
+          until [ "$retry" -ge 10 ]
+          do
+            ./aoxiangRobot -u $AOXIANG_USERNAME -p ./password yqtb \
+              -p "$YQTB_PROVINCE" -c "$YQTB_CITY" -l $YQTB_LOCATION && break
+            ((retry++))
+            echo "\033[0;31mCheckin failed, retry ${retry}"
+            sleep 1m
+          done

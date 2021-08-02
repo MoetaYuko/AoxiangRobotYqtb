@@ -19,6 +19,7 @@ jobs:
       - name: Install dependencies
         run: pip install --upgrade -r requirements.txt
       - name: main
+        shell: bash {0}
         run: |
           echo ${{ secrets.AOXIANG_PASSWORD }} > ./password
           retry=0
@@ -29,6 +30,6 @@ jobs:
               -c "${{ secrets.YQTB_CITY }}" \
               -l ${{ secrets.YQTB_LOCATION }} && break
             ((retry++))
-            echo "\033[0;31mCheckin failed, retry ${retry}"
+            echo -e "\033[0;31mCheckin failed, retry ${retry}\033[0m"
             sleep 1m
           done

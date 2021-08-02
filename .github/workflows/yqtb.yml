@@ -23,13 +23,14 @@ jobs:
         run: |
           echo ${{ secrets.AOXIANG_PASSWORD }} > ./password
           retry=0
-          until [ "$retry" -ge 10 ]
+          until [ "$retry" -ge 30 ]
           do
             ./aoxiangRobot -u ${{ secrets.AOXIANG_USERNAME }} -p ./password yqtb \
               -p "${{ secrets.YQTB_PROVINCE }}" \
               -c "${{ secrets.YQTB_CITY }}" \
-              -l ${{ secrets.YQTB_LOCATION }} && break
+              -l ${{ secrets.YQTB_LOCATION }} && exit 0
             ((retry++))
             echo -e "\033[0;31mCheckin failed, retry ${retry}\033[0m"
             sleep 1m
           done
+          exit 1

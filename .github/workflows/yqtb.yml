@@ -2,7 +2,7 @@ name: 'yqtb'
 
 on:
   schedule:
-    - cron: '0 1 * * *'
+    - cron: '12 1-8 * * *'
   workflow_dispatch:
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
         run: |
           echo ${{ secrets.AOXIANG_PASSWORD }} > ./password
           retry=0
-          until [ "$retry" -ge 30 ]
+          until [ "$retry" -ge 10 ]
           do
             ./aoxiangRobot -u ${{ secrets.AOXIANG_USERNAME }} -p ./password yqtb \
               -p "${{ secrets.YQTB_PROVINCE }}" \

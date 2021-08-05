@@ -2,7 +2,7 @@ name: 'yqtb'
 
 on:
   schedule:
-    - cron: '12 1-8 * * *'
+    - cron: '12,43 1-8 * * *'
   workflow_dispatch:
 
 jobs:
@@ -19,18 +19,9 @@ jobs:
       - name: Install dependencies
         run: pip install --upgrade -r requirements.txt
       - name: main
-        shell: bash {0}
         run: |
           echo ${{ secrets.AOXIANG_PASSWORD }} > ./password
-          retry=0
-          until [ "$retry" -ge 10 ]
-          do
-            ./aoxiangRobot -u ${{ secrets.AOXIANG_USERNAME }} -p ./password yqtb \
-              -p "${{ secrets.YQTB_PROVINCE }}" \
-              -c "${{ secrets.YQTB_CITY }}" \
-              -l ${{ secrets.YQTB_LOCATION }} && exit 0
-            ((retry++))
-            echo -e "\033[0;31mCheckin failed, retry ${retry}\033[0m"
-            sleep 1m
-          done
-          exit 1
+          ./aoxiangRobot -u ${{ secrets.AOXIANG_USERNAME }} -p ./password yqtb \
+            -p "${{ secrets.YQTB_PROVINCE }}" \
+            -c "${{ secrets.YQTB_CITY }}" \
+            -l ${{ secrets.YQTB_LOCATION }}
